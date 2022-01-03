@@ -12,5 +12,3 @@ json-logging
 flake8
 flake8-colors
 yamllint
-boto3
-botocore
