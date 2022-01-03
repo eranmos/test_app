@@ -1,20 +1,10 @@
-import boto3
-import botocore
-
 def get_machine_time():
     return 1602824750094  # No need to implement at the moment
 
 
 def check_aws_connection():
     # TODO: implement real call to aws describe instances. If successful, return true. otherwise return False
-    ec2_client = boto3.client('ec2', region_name='us-east-1')
-    try:
-        ec2_client.describe_instances()
-    except botocore.exceptions.ProfileNotFound as err:
-        print("The error is :" , err)
-        return False
-    else:
-        return True
+    return True
 
 
 def check_db_connection():

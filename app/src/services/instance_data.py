@@ -46,8 +46,6 @@ def get_state_reason(instance):
 
 
 class InstanceData:
-    eran = 0
-
     def __init__(self, ec2_client: client):
         self.ec2_client = ec2_client
 
@@ -62,42 +60,8 @@ class InstanceData:
         #       NOTE: the `self.ec2_client` is an object that is returned from doing `boto3.client('ec2')` as you can
         #       probably find in many examples on the web
         #       To read more on how to use Boto for EC2 look for the original Boto documentation
-        dResponse = self.ec2_client.describe_instances()
-        lReservations = dResponse['Reservations']
-        lInstances = []
-        lRequiredKeys = [
-            'Cloud', 'Region', 'ImageId', 'LaunchTime', 'State', 'SubnetId',
-            'VpcId', 'MacAddress', 'NetworkInterfaceId', 'PrivateDnsName', 'PrivateIpAddress', 'PublicDnsName',
-            'PublicIpAddress', 'RootDeviceName', 'RootDeviceType', 'SecurityGroups', 'Tags',
-        ]
-        for reservation in lReservations:
-            dInstance = reservation['Instances'][0]
+        my_instances = self.ec2_client.describe_instances()
 
-            dict_variable = {}
-
-            for key in lRequiredKeys:
-                dict_variable[key] = None
-
-            dict_variable = {key: value for (key, value) in dInstance.items() if key in lRequiredKeys}
-
-            dict_variable['Cloud'] = 'aws'
-            dict_variable['Region'] = 'us-east-1'
-            dict_variable['Type'] = dInstance['InstanceType']
-            dict_variable['StateReason'] = None
-
-            for interface in dInstance['NetworkInterfaces']:
-                dict_variable['MacAddress'] = (interface['MacAddress'])
-                dict_variable['NetworkInterfaceId'] = (interface['NetworkInterfaceId'])
-
-                for privateIpAddress in interface['PrivateIpAddresses']:
-                    if 'PublicIp' in privateIpAddress:
-                        dict_variable['PublicIpAddress'] = (privateIpAddress['PublicIp'])
-                break
-
-            if 'IamInstanceProfile' in dInstance:
-                dict_variable['Id'] = dInstance['IamInstanceProfile']['Id']
-
-            lInstances.append(dict_variable)
-
-        return {'Instances': lInstances}
-
+        # blaaaaaaa
+        
+        return my_instances
